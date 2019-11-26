@@ -1,4 +1,9 @@
 *.log
+
 *.db
+
 target/
+
 bin/
+
+.idea/
