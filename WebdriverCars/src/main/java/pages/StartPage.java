@@ -1,3 +1,5 @@
+package pages;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -6,31 +8,20 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import model.PageError;
+import model.Account;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 public class StartPage extends AbstractPage{
     private final String PAGE_URL = "https://www.kayak.com/horizon/sem/cars/general";
+    private final Logger LOGGER = LogManager.getRootLogger();
     private final int WAIT_TIMEOUT_SECONDS = 15;
-    private DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-    private DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
 
-
-    public StartPage(WebDriver driver) {
-        super(driver);
-        driver.get(PAGE_URL);
-        PageFactory.initElements(driver, this);
-    }
-
-    @Override
-    public StartPage openPage() {
-        webDriver.get(PAGE_URL);
-        webDriver.manage().timeouts().implicitlyWait(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
-        return this;
-    }
 
     @FindBy(xpath = "//*[@id=\"uO2g-pickup-display-inner\"]")
     private WebElement pickUpPlace;
@@ -53,41 +44,89 @@ public class StartPage extends AbstractPage{
     @FindBy(xpath = "//*[@id=\"uO2g-submit\"]")
     private WebElement searchButton;
 
-    private void searchCar() {
-        searchButton.click();
+    @FindBy(xpath = "//*[@id=\"TCe_-username\"]")
+    private WebElement emailInput;
+
+    @FindBy(xpath = "//*[@id=\"TCe_-password\"]")
+    private WebElement passwordInput;
+
+    @FindBy(xpath = "//*[@id=\"TCe_-submit\"]")
+    private WebElement submitButton;
+
+    @FindBy(className = "_itL")
+    private WebElement invalidEmail;
+
+    public StartPage(WebDriver driver) {
+        super(driver);
+        driver.get(PAGE_URL);
+        PageFactory.initElements(driver, this);
     }
 
-    private StartPage selectPickUpTime(LocalTime picTime) {
-        new Select(pickUpTime).selectByVisibleText(picTime.format(timeFormatter));
+    @Override
+    public StartPage openPage() {
+        webDriver.get(PAGE_URL);
+        LOGGER.info("Page was opened");
+        webDriver.manage().timeouts().implicitlyWait(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         return this;
     }
 
-    private StartPage selectDropOffTime(LocalTime dropTime) {
-        new Select(dropOffTime).selectByVisibleText(dropTime.format(timeFormatter));
+
+    private void searchCar() {
+        searchButton.click();
+        LOGGER.info("Searching...");
+    }
+
+    private StartPage selectPickUpTime(String picTime) {
+        new Select(pickUpTime);
+        return this;
+    }
+
+    public boolean checkOfferToRegisterMessage(PageError error) {
+        return invalidEmail.isDisplayed()
+                && invalidEmail.getText().
+                contains(error.getErrorDescription());
+    }
+
+    public StartPage login(Account account)
+    {
+        emailInput.sendKeys(account.getEmail());
+        passwordInput.sendKeys(account.getPassword());
+        submitButton.click();
+        LOGGER.info("Login performed");
+        return new StartPage(webDriver);
+    }
+
+
+    private StartPage selectDropOffTime(String dropTime) {
+        new Select(dropOffTime);
         return this;
     }
 
     private StartPage inputPickUpPlace(String place) {
         pickUpPlace.clear();
         pickUpPlace.sendKeys(place);
+        LOGGER.info("PickUpPlace was sended");
         return this;
     }
 
     private StartPage inputDropOffPlace(String place) {
         dropOffPlace.clear();
         dropOffPlace.sendKeys(place);
+        LOGGER.info("DropOffPlace was sended");
         return this;
     }
 
-    private StartPage inputPickUpDate(LocalDate date) {
+    private StartPage inputPickUpDate(String date) {
         pickUpDate.clear();
-        pickUpDate.sendKeys(date.format(dateFormatter));
+        pickUpDate.sendKeys(date);
+        LOGGER.info("PickUpDate was sended");
         return this;
     }
 
-    private StartPage inputDropOffDate(LocalDate date) {
+    private StartPage inputDropOffDate(String date) {
         dropOffDate.clear();
-        dropOffDate.sendKeys(date.format(dateFormatter));
+        dropOffDate.sendKeys(date);
+        LOGGER.info("DropOffDate was sended");
         return this;
     }
 
@@ -100,7 +139,7 @@ public class StartPage extends AbstractPage{
     }
 
 
-    public StartPage pickUpTimeIsBeforeTheCurrentTime(String pickUpPlace, LocalDate pickUpDate, LocalDate dropOffDate) {
+    public StartPage pickUpTimeIsBeforeTheCurrentTime(String pickUpPlace, String pickUpDate, String dropOffDate) {
         inputPickUpPlace(pickUpPlace);
         inputPickUpDate(pickUpDate);
         inputDropOffDate(dropOffDate);
@@ -108,7 +147,7 @@ public class StartPage extends AbstractPage{
         return this;
     }
 
-    public StartPage searchWithWrongPickUpField(String WrongPickUpPlace, LocalDate pickUpDate) {
+    public StartPage searchWithWrongPickUpField(String WrongPickUpPlace, String pickUpDate) {
         inputPickUpPlace(WrongPickUpPlace);
         inputPickUpDate(pickUpDate);
         inputDropOffDate(pickUpDate);
@@ -116,10 +155,10 @@ public class StartPage extends AbstractPage{
         return this;
     }
 
-    public StartPage searchWithEmptyPickUpField(String EmptyPickUpPlace, LocalDate pickUpDate) {
+    public StartPage searchWithEmptyPickUpField(String EmptyPickUpPlace, String pickUpDate,String dropOffDate) {
         inputPickUpPlace(EmptyPickUpPlace);
         inputPickUpDate(pickUpDate);
-        inputDropOffDate(pickUpDate);
+        inputDropOffDate(dropOffDate);
         searchCar();
         return this;
     }
