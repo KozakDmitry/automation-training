@@ -1,6 +1,8 @@
 package test;
 
 import model.CarRent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import model.PageError;
 import service.AccountCreator;
@@ -17,9 +19,11 @@ import model.Car;
 public class SearchCarPageTest extends CommonConditions{
     private WebDriver driver;
     private SearchCarPage page;
+    private static final Logger LOGGER = LogManager.getRootLogger();
 
     @Test
     public void rentCarWithInsuranceWithoutCreditCard() {
+    LOGGER.info("Test with Insurance started");
         page = new SearchCarPage(driver)
                 .openPage()
                 .InputDataPerson(CarRentCreator.withoutCreditCard());
@@ -29,6 +33,7 @@ public class SearchCarPageTest extends CommonConditions{
 
     @Test
     public void rentCarWithWrongNumber() {
+        LOGGER.info("Test with WrongNumber started");
         page = new SearchCarPage(driver)
                 .openPage()
                 .InputDataPerson(CarRentCreator.withWrongNumber());

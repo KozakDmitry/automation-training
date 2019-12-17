@@ -5,8 +5,6 @@ import model.Account;
 
 public class AccountCreator {
 
-    public static final String TESTDATA_USER_EMAIL = "testdata.account.email";
-    public static final String TESTDATA_USER_PASSWORD = "testdata.account.password";
     public static final String TESTDATA_USER_EMAIL_CASE4 = "testdata.case4.email";
     public static final String TESTDATA_USER_PASSWORD_CASE4 = "testdata.case4.password";
     public static final String TESTDATA_USER_EMAIL_CASE5 = "testdata.case5.email";

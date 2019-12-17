@@ -1,5 +1,7 @@
 package test;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import model.PageError;
 import service.AccountCreator;
@@ -14,11 +16,13 @@ import model.Car;
 public class StartPageTest extends CommonConditions{
     private WebDriver driver;
     private StartPage page;
+    private static final Logger LOGGER = LogManager.getRootLogger();
 
 
 
     @Test
     public void pickUpTimeIsBeforeTheCurrentTime() {
+        LOGGER.info("Test with PickUpBeforeNow started");
         page = new StartPage(driver)
                 .openPage()
                 .inputData(CarCreator.withNegativeRentalPeriodFromProperty());
@@ -28,6 +32,7 @@ public class StartPageTest extends CommonConditions{
 
     @Test
     public void searchWithEmptyFields() {
+        LOGGER.info("Test with EmtyFiels started");
         page = new StartPage(driver)
                 .openPage()
                 .inputData(CarCreator.withEmptyFields());
@@ -37,6 +42,7 @@ public class StartPageTest extends CommonConditions{
 
     @Test
     public void searchFromDifferentContinents() {
+        LOGGER.info("Test with DifferentContinents started");
         page = new StartPage(driver)
                 .openPage()
                 .inputData(CarCreator.withDifferentContinets());
@@ -46,6 +52,7 @@ public class StartPageTest extends CommonConditions{
 
     @Test
     public void searchToImaginaryPlace() {
+        LOGGER.info("Test with ImaginaryPlace started");
         page = new StartPage(driver)
                 .openPage()
                 .inputData(CarCreator.withImaginaryPlace());
