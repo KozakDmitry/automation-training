@@ -14,9 +14,9 @@ public class CommonConditions {
 
 
     @BeforeMethod()
-    public void setUp()
-    {
+    public void setUp() throws InterruptedException {
         driver = DriverSingleton.getDriver();
+        Thread.sleep(1000);
     }
 
     @AfterMethod(alwaysRun = true)

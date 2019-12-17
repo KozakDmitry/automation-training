@@ -1,5 +1,6 @@
 package pages;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import model.Car;
 import model.PageError;
 import model.Account;
 import java.time.LocalDate;
@@ -23,10 +25,30 @@ public class StartPage extends AbstractPage{
     private final int WAIT_TIMEOUT_SECONDS = 15;
 
 
-    @FindBy(xpath = "//*[@id=\"uO2g-pickup-display-inner\"]")
+
+
+    @FindBy(className = "_iiN _ial _iNI _iaL _idj _iyq _iaj _ieK")
+    private WebElement OpenSignIn;
+
+    @FindBy(className = "_i2B _i2C _h-8 _iAx _ikD Button-No-Standard-Style")
+    private WebElement registerChange;
+
+    @FindBy(id = "OLt7-username")
+    private WebElement registerEmail;
+
+    @FindBy(id = " OLt7-password")
+    private WebElement registerPassword;
+
+    @FindBy(id = " OLt7-submit")
+    private WebElement registerSubmit;
+
+    @FindBy(id = " Vs8a-error-message")
+    private WebElement errorRegisterMessage;
+
+    @FindBy(xpath = "//*[@id=\"ZZsn-pickup-display\"]")
     private WebElement pickUpPlace;
 
-    @FindBy(xpath = "//[@id=\"car-dropoff-clp\"]")
+    @FindBy(xpath = "//*[@id=\"ZZsn-dropoff-display\"]")
     private WebElement dropOffPlace;
 
     @FindBy(xpath = "//*[@id=\"uO2g-dateRangeInput-display-start-inner\"]")
@@ -38,10 +60,13 @@ public class StartPage extends AbstractPage{
     @FindBy(xpath = "//*[@id=\"uO2g-dateRangeInput-start-time\"]")
     private WebElement pickUpTime;
 
-    @FindBy(xpath = "//*[@id=\"uO2g-dateRangeInput-end-time\"]")
-    private WebElement dropOffTime;
+    @FindBy(className = "//*[@id=\"c3RGs-messages\"]")
+    private WebElement placeError;
 
-    @FindBy(xpath = "//*[@id=\"uO2g-submit\"]")
+    @FindBy(className= "_iaf _iam _ian _iai")
+    private WebElement loginSuccess;
+
+    @FindBy(xpath = "//*[@id=\"ZZsn-submit\"]")
     private WebElement searchButton;
 
     @FindBy(xpath = "//*[@id=\"TCe_-username\"]")
@@ -51,10 +76,13 @@ public class StartPage extends AbstractPage{
     private WebElement passwordInput;
 
     @FindBy(xpath = "//*[@id=\"TCe_-submit\"]")
-    private WebElement submitButton;
+    private WebElement loginSubmitButton;
 
-    @FindBy(className = "_itL")
-    private WebElement invalidEmail;
+    @FindBy(id = "c7hCm-error-message")
+    private WebElement errorLogin;
+
+    @FindBy(className = "_iaB _it _iH1")
+    private WebElement noCars;
 
     public StartPage(WebDriver driver) {
         super(driver);
@@ -78,29 +106,78 @@ public class StartPage extends AbstractPage{
 
     private StartPage selectPickUpTime(String picTime) {
         new Select(pickUpTime);
+        LOGGER.info("Selected time");
         return this;
     }
 
-    public boolean checkOfferToRegisterMessage(PageError error) {
-        return invalidEmail.isDisplayed()
-                && invalidEmail.getText().
+    public boolean checkPlaceErrorMessage(PageError error) {
+        return placeError.isDisplayed()
+                && placeError.getText().
                 contains(error.getErrorDescription());
     }
 
-    public StartPage login(Account account)
-    {
-        emailInput.sendKeys(account.getEmail());
-        passwordInput.sendKeys(account.getPassword());
-        submitButton.click();
-        LOGGER.info("Login performed");
-        return new StartPage(webDriver);
+    public boolean checkPlaceLoginErrorMessage(PageError error){
+        return errorLogin.isDisplayed()
+                && errorLogin.getText().
+                contains(error.getErrorDescription());
+    }
+    public boolean checkPlaceRegisterErrorMessage(PageError error){
+        return errorRegisterMessage.isDisplayed()
+                && errorRegisterMessage.getText().
+                contains(error.getErrorDescription());
     }
 
-
-    private StartPage selectDropOffTime(String dropTime) {
-        new Select(dropOffTime);
+    public StartPage inputData(Car car){
+        if(!registerChange.isDisplayed()){
+            OpenSignIn.click();
+            LOGGER.info("Opened Sign in");
+        }
+        pickUpPlace.clear();
+        pickUpPlace.sendKeys(car.getPickUpPlace());
+        LOGGER.info("Filled car PickUpPlace");
+        dropOffPlace.clear();
+        dropOffDate.sendKeys(car.getdropOffDate());
+        LOGGER.info("Filled car DropOffPlace");
+        pickUpDate.clear();
+        pickUpDate.sendKeys(car.getpickUpDate());
+        LOGGER.info("Filled car PickUpDate");
+        dropOffDate.clear();
+        dropOffDate.sendKeys(car.getdropOffDate());
+        LOGGER.info("Filled car DropOffDate");
+        searchButton.click();
+        LOGGER.info("Search performed");
         return this;
     }
+
+    public StartPage inputRegisterData(Account account){
+        if(registerChange.isDisplayed()) {
+            registerChange.click();
+            LOGGER.info("Change to register");
+        }
+        registerEmail.clear();
+        registerEmail.sendKeys(account.getEmail());
+        LOGGER.info("Filled email ");
+        registerPassword.clear();
+        registerPassword.sendKeys(account.getPassword());
+        LOGGER.info("Filled password");
+        registerSubmit.click();
+        LOGGER.info("Register performed");
+        return this;
+    }
+
+    public StartPage inputDataAccount(Account account){
+        emailInput.clear();
+        emailInput.sendKeys(account.getEmail());
+        LOGGER.info("Filled email");
+        passwordInput.clear();
+        passwordInput.sendKeys(account.getPassword());
+        LOGGER.info("Filled password");
+        loginSubmitButton.click();
+        LOGGER.info("Login performed");
+        return this;
+    }
+
+
 
     private StartPage inputPickUpPlace(String place) {
         pickUpPlace.clear();
@@ -130,37 +207,15 @@ public class StartPage extends AbstractPage{
         return this;
     }
 
-    public boolean isErrorMessageVisible(WebDriver driver) {
-        WebElement errorMessage =
-                new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
-                        .until(ExpectedConditions
-                                .presenceOfElementLocated(By.xpath("//*[@id=\"c2O1F-dialog-body\"]/div")));
-        return errorMessage.isDisplayed();
+    public boolean isLoginSuccess(){
+        return loginSuccess.isDisplayed();
+    }
+    public boolean isNoCarsSuccess(PageError error){
+      return noCars.isDisplayed()
+                && noCars.getText().
+                contains(error.getErrorDescription());
     }
 
 
-    public StartPage pickUpTimeIsBeforeTheCurrentTime(String pickUpPlace, String pickUpDate, String dropOffDate) {
-        inputPickUpPlace(pickUpPlace);
-        inputPickUpDate(pickUpDate);
-        inputDropOffDate(dropOffDate);
-        searchCar();
-        return this;
-    }
-
-    public StartPage searchWithWrongPickUpField(String WrongPickUpPlace, String pickUpDate) {
-        inputPickUpPlace(WrongPickUpPlace);
-        inputPickUpDate(pickUpDate);
-        inputDropOffDate(pickUpDate);
-        searchCar();
-        return this;
-    }
-
-    public StartPage searchWithEmptyPickUpField(String EmptyPickUpPlace, String pickUpDate,String dropOffDate) {
-        inputPickUpPlace(EmptyPickUpPlace);
-        inputPickUpDate(pickUpDate);
-        inputDropOffDate(dropOffDate);
-        searchCar();
-        return this;
-    }
 
 }

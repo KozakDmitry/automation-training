@@ -72,7 +72,7 @@ public class Car {
 
     @Override
     public int hashCode() {
-        return Objects.hash(PickUpPlace, DropOffPlace, pickUpDate, dropOffDate);
+            return Objects.hash(PickUpPlace, DropOffPlace, pickUpDate, dropOffDate);
     }
 
     @Override

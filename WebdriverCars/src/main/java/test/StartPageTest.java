@@ -1,14 +1,15 @@
 package test;
 
 import org.openqa.selenium.WebDriver;
-
+import model.PageError;
+import service.AccountCreator;
+import service.PageErrorCreator;
+import service.CarCreator;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
 import pages.StartPage;
 import model.Car;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 public class StartPageTest extends CommonConditions{
     private WebDriver driver;
@@ -17,28 +18,42 @@ public class StartPageTest extends CommonConditions{
 
 
     @Test
-    public void pickUpTimeIsBeforeTheCurrentTime(Car Car) {
+    public void pickUpTimeIsBeforeTheCurrentTime() {
         page = new StartPage(driver)
                 .openPage()
-                .pickUpTimeIsBeforeTheCurrentTime(Car.getPickUpPlace(), Car.getpickUpDate(), Car.getdropOffDate());
-        Assert.assertTrue(page.isErrorMessageVisible(driver));
+                .inputData(CarCreator.withNegativeRentalPeriodFromProperty());
+        PageError expectedError = PageErrorCreator.errorForNegativeRentalPeriodFromProperty();
+        Assert.assertTrue(page.checkPlaceErrorMessage(expectedError));
     }
 
     @Test
-    public void searchWithEmptyPickUpField(Car Car) {
+    public void searchWithEmptyFields() {
         page = new StartPage(driver)
                 .openPage()
-                .searchWithEmptyPickUpField(Car.getPickUpPlace(), Car.getpickUpDate(), Car.getdropOffDate());
-        Assert.assertTrue(page.isErrorMessageVisible(driver));
+                .inputData(CarCreator.withEmptyFields());
+        PageError expectedError = PageErrorCreator.errorForEmptyFields();
+        Assert.assertTrue(page.checkPlaceErrorMessage(expectedError));
     }
 
     @Test
-    public void searchWithWrongPickUpField(Car Car) {
+    public void searchFromDifferentContinents() {
         page = new StartPage(driver)
                 .openPage()
-                .searchWithWrongPickUpField(Car.getPickUpPlace(), Car.getpickUpDate());
-        Assert.assertTrue(page.isErrorMessageVisible(driver));
+                .inputData(CarCreator.withDifferentContinets());
+        PageError expectedError = PageErrorCreator.errorForNoCars();
+        Assert.assertTrue(page.checkPlaceErrorMessage(expectedError));
     }
+
+    @Test
+    public void searchToImaginaryPlace() {
+        page = new StartPage(driver)
+                .openPage()
+                .inputData(CarCreator.withImaginaryPlace());
+        PageError expectedError = PageErrorCreator.errorForNoCars();
+        Assert.assertTrue(page.checkPlaceErrorMessage(expectedError));
+    }
+
+
 
 
     @AfterClass
