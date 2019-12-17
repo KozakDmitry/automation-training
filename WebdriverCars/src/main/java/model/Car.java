@@ -77,7 +77,7 @@ public class Car {
 
     @Override
     public String toString() {
-        return "HotelReservation{" +
+        return "Car{" +
                 "placeFrom='" + PickUpPlace + '\'' +
                 "placeTo='" + DropOffPlace + '\'' +
                 ", pickUpDate=" + pickUpDate +

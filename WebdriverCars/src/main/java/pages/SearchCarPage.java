@@ -25,6 +25,8 @@ public class SearchCarPage extends AbstractPage{
     private final Logger LOGGER = LogManager.getRootLogger();
     private final int WAIT_TIMEOUT_SECONDS = 15;
     private final String TESTDATA_CASE910_XPATH = "testdata.case9-10.carxpath";
+
+
     @FindBy(className = "_id7 _iMl _ia1 _irc _iQB _h-Y _iai")
     private WebElement KayakCar;
     @FindBy(xpath = "//*[@id=\"disabledBookButton\"]")
@@ -53,6 +55,8 @@ public class SearchCarPage extends AbstractPage{
     private WebElement address;
     @FindBy(className = "Checkout-Common-Uicore-SimpleButton Button-Dark Button-Disabled fullWidth")
     private WebElement Submit;
+
+
     public SearchCarPage(WebDriver driver) {
         super(driver);
         driver.get(PAGE_URL);

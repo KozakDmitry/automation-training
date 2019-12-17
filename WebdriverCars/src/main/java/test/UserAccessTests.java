@@ -46,4 +46,6 @@ public class UserAccessTests extends CommonConditions {
         Assert.assertTrue(page.checkPlaceRegisterErrorMessage(expectedError));
     }
 
+
+
 }

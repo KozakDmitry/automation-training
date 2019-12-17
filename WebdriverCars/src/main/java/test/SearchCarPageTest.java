@@ -35,4 +35,12 @@ public class SearchCarPageTest extends CommonConditions{
         PageError expectedError = PageErrorCreator.errorWithWrongNumber();
         Assert.assertTrue(page.checkPlaceErrorMessage(expectedError));
     }
+
+    @AfterClass
+    public void browserTearDown() {
+        if (driver != null) {
+            driver.close();
+            driver = null;
+        }
+    }
 }
