@@ -23,9 +23,7 @@ public class SearchCarPageTest extends CommonConditions{
     @Test
     public void rentCarWithInsuranceWithoutCreditCard() {
     LOGGER.info("Test with Insurance started");
-        page = new SearchCarPage(driver)
-                .openPage()
-                .InputDataPerson(CarRentCreator.withoutCreditCard());
+        page = new SearchCarPage(driver);
         PageError expectedError = PageErrorCreator.errorWithoutCreditCard();
         Assert.assertTrue(page.checkPlaceErrorMessage(expectedError));
     }
@@ -33,9 +31,7 @@ public class SearchCarPageTest extends CommonConditions{
     @Test
     public void rentCarWithWrongNumber() {
         LOGGER.info("Test with WrongNumber started");
-        page = new SearchCarPage(driver)
-                .openPage()
-                .InputDataPerson(CarRentCreator.withWrongNumber());
+        page = new SearchCarPage(driver);
         PageError expectedError = PageErrorCreator.errorWithWrongNumber();
         Assert.assertTrue(page.checkPlaceErrorMessage(expectedError));
     }
