@@ -14,7 +14,6 @@ import pages.StartPage;
 import model.Car;
 
 public class StartPageTest extends CommonConditions{
-    private WebDriver driver;
     private StartPage page;
     private static final Logger LOGGER = LogManager.getRootLogger();
 
@@ -63,11 +62,5 @@ public class StartPageTest extends CommonConditions{
 
 
 
-    @AfterClass
-    public void browserTearDown() {
-        if (driver != null) {
-            driver.close();
-            driver = null;
-        }
-    }
+
 }

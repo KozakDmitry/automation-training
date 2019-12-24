@@ -45,13 +45,13 @@ public class StartPage extends AbstractPage{
     @FindBy(id = " Vs8a-error-message")
     private WebElement errorRegisterMessage;
 
-    @FindBy(xpath = "//*[@id=\"ZZsn-pickup-display\"]")
+    @FindBy(id = "c2aL9-pickup")
     private WebElement pickUpPlace;
 
-    @FindBy(xpath = "//*[@id=\"ZZsn-dropoff-display\"]")
+    @FindBy(id = "c2aL9-dropoff-date-input")
     private WebElement dropOffPlace;
 
-    @FindBy(xpath = "//*[@id=\"uO2g-dateRangeInput-display-start-inner\"]")
+    @FindBy(id = "c2aL9-pickup-date-input")
     private WebElement pickUpDate;
 
     @FindBy(xpath = "//*[@id=\"uO2g-dateRangeInput-display-end-inner\"]")
@@ -84,6 +84,12 @@ public class StartPage extends AbstractPage{
     @FindBy(className = "_iaB _it _iH1")
     private WebElement noCars;
 
+    @FindBy(id = "PXe0-switch-display-status")
+    private WebElement choosePlace;
+
+    @FindBy(id = "PXe0-switch-option-2")
+    private WebElement diffplace;
+
     public StartPage(WebDriver driver) {
         super(driver);
         driver.get(PAGE_URL);
@@ -94,7 +100,7 @@ public class StartPage extends AbstractPage{
     public StartPage openPage() {
         webDriver.get(PAGE_URL);
         LOGGER.info("Page was opened");
-        webDriver.manage().timeouts().implicitlyWait(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
+       // webDriver.manage().timeouts().implicitlyWait(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         return this;
     }
 
@@ -128,16 +134,18 @@ public class StartPage extends AbstractPage{
     }
 
     public StartPage inputData(Car car){
-        if(!registerChange.isDisplayed()){
-            OpenSignIn.click();
-            LOGGER.info("Opened Sign in");
-        }
+        LOGGER.info("Try to input");
+//        if(!registerChange.isDisplayed()){
+//            OpenSignIn.click();
+//            LOGGER.info("Opened Sign in");
+//        }
+
         pickUpPlace.clear();
         pickUpPlace.sendKeys(car.getPickUpPlace());
         LOGGER.info("Filled car PickUpPlace");
-        dropOffPlace.clear();
-        dropOffDate.sendKeys(car.getdropOffDate());
-        LOGGER.info("Filled car DropOffPlace");
+//        dropOffPlace.clear();
+//        dropOffDate.sendKeys(car.getdropOffDate());
+//        LOGGER.info("Filled car DropOffPlace");
         pickUpDate.clear();
         pickUpDate.sendKeys(car.getpickUpDate());
         LOGGER.info("Filled car PickUpDate");

@@ -1,6 +1,7 @@
 package test;
 
 import driver.DriverSingleton;
+import org.testng.annotations.AfterClass;
 import util.TestListener;
 import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterMethod;
@@ -14,9 +15,8 @@ public class CommonConditions {
 
 
     @BeforeMethod()
-    public void setUp() throws InterruptedException {
+    public void setUp() {
         driver = DriverSingleton.getDriver();
-        Thread.sleep(1000);
     }
 
     @AfterMethod(alwaysRun = true)

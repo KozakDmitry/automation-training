@@ -12,6 +12,7 @@ import org.testng.Assert;
 
 
 public class UserAccessTests extends CommonConditions {
+    private StartPage page;
     private static final Logger LOGGER = LogManager.getRootLogger();
 
     @Test

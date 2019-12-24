@@ -17,7 +17,6 @@ import pages.SearchCarPage;
 import model.Car;
 
 public class SearchCarPageTest extends CommonConditions{
-    private WebDriver driver;
     private SearchCarPage page;
     private static final Logger LOGGER = LogManager.getRootLogger();
 
@@ -41,11 +40,5 @@ public class SearchCarPageTest extends CommonConditions{
         Assert.assertTrue(page.checkPlaceErrorMessage(expectedError));
     }
 
-    @AfterClass
-    public void browserTearDown() {
-        if (driver != null) {
-            driver.close();
-            driver = null;
-        }
-    }
+
 }
