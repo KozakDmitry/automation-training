@@ -18,7 +18,7 @@ public class UserAccessTests extends CommonConditions {
     @Test
     public void LoginWithEmptyField(){
         LOGGER.info("Test LoginWithEmptyField started");
-        StartPage page = new StartPage(driver)
+        page = new StartPage(driver)
                 .openPage()
                 .inputDataAccount(AccountCreator.withEmptyFields());
         PageError expectedError = PageErrorCreator.errorLoginForEmptyFields();
@@ -28,7 +28,7 @@ public class UserAccessTests extends CommonConditions {
     @Test
     public void loginWithNotRegisteredEmailTest() {
         LOGGER.info("Test LoginWithUnregisteredEmail started");
-        StartPage page = new StartPage(driver)
+        page = new StartPage(driver)
                   .openPage()
                   .inputDataAccount(AccountCreator.withNotRegisteredEmail());
         PageError expectedError = PageErrorCreator.errorLoginWithNotRegisteredEmail();
@@ -38,7 +38,7 @@ public class UserAccessTests extends CommonConditions {
     @Test
     public void loginWithRegisteredEmailTest() {
         LOGGER.info("Test  LoginWithProperData started");
-        StartPage page = new StartPage(driver)
+        page = new StartPage(driver)
                 .openPage()
                 .inputDataAccount(AccountCreator.withRegisteredEmail());
         Assert.assertTrue(page.isLoginSuccess());
@@ -47,7 +47,7 @@ public class UserAccessTests extends CommonConditions {
     @Test
     public void registerWithWrongEmailTest() {
         LOGGER.info("Test LoginWithWrongEmail started");
-        StartPage page = new StartPage(driver)
+        page = new StartPage(driver)
                 .openPage()
                 .inputRegisterData(AccountCreator.withWrongEmail());
         PageError expectedError = PageErrorCreator.errorWithWrongEmail();

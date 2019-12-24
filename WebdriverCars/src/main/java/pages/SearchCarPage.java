@@ -21,7 +21,7 @@ import java.time.LocalTime;
 import java.util.concurrent.TimeUnit;
 
 public class SearchCarPage extends AbstractPage{
-    private final String PAGE_URL = "https://www.kayak.com/cars/Minsk-c9524/2019-12-17/2019-12-18;map?sort=rank_a&fs=caragency=~avis";
+    private final String PAGE_URL = "https://www.kayak.com/cars/Minsk-c9524/2019-12-25/2019-12-26;map?sort=rank_a&fs=caragency=~avis";
     private final Logger LOGGER = LogManager.getRootLogger();
     private final int WAIT_TIMEOUT_SECONDS = 15;
     private final String TESTDATA_CASE910_XPATH = "testdata.case9-10.carxpath";

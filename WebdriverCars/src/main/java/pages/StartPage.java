@@ -8,6 +8,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,6 +27,7 @@ public class StartPage extends AbstractPage{
     private final int WAIT_TIMEOUT_SECONDS = 15;
 
 
+    WebDriverWait wait = new WebDriverWait(webDriver, WAIT_TIMEOUT_SECONDS);
 
 
     @FindBy(className = "_iiN _ial _iNI _iaL _idj _iyq _iaj _ieK")
@@ -90,6 +93,11 @@ public class StartPage extends AbstractPage{
     @FindBy(id = "PXe0-switch-option-2")
     private WebElement diffplace;
 
+    @FindBy(id = "F5Bn")
+    private WebElement mainpage;
+
+
+
     public StartPage(WebDriver driver) {
         super(driver);
         driver.get(PAGE_URL);
@@ -99,6 +107,7 @@ public class StartPage extends AbstractPage{
     @Override
     public StartPage openPage() {
         webDriver.get(PAGE_URL);
+        wait.until(ExpectedConditions.visibilityOf(webDriver.findElement(By.id("F5Bn"))));
         LOGGER.info("Page was opened");
        // webDriver.manage().timeouts().implicitlyWait(WAIT_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         return this;
